@@ -1,0 +1,29 @@
+{
+  "name": "Test",
+  "description": "Test PoC",
+  "keywords": [
+    "productivity",
+    "HTML5",
+    "scalpel"
+  ],
+  "env": {
+    "SECRET_TOKEN": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret-password"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "standard-1x"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "9.5"
+      }
+    }
+  ]
+}
