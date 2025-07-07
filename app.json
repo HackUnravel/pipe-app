@@ -1,0 +1,19 @@
+{
+  "name": "test-app-abc",
+  "description": "A description of your app",
+  "env": {
+    "API_KEY": {
+      "description": "API key for authentication",
+      "required": true,
+      "generator": "secret"
+    }
+  },
+  "scripts": {},
+  "stack": "heroku-22",
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
