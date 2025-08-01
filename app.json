@@ -9,11 +9,5 @@
     }
   },
   "scripts": {},
-  "stack": "heroku-22",
-  "formation": {
-    "web": {
-      "quantity": 1,
-      "size": "dyno-1c-0.5gb"
-    }
-  }
+  "stack": "heroku-22"
 }
