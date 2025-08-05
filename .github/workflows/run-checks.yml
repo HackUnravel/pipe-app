@@ -23,7 +23,7 @@ jobs:
         uses: LouisBrunner/checks-action@v2.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ci/tests
+          name: ci/tests/saurabh
           conclusion: ${{ job.status }}
           output: |
             {"summary":"Test suite for PR #${{ github.event.pull_request.number }}","details":"Ran tests for commit ${{ github.event.pull_request.head.sha }}"}
