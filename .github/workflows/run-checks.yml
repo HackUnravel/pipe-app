@@ -1,0 +1,29 @@
+name: Run PR Checks
+on:
+  pull_request:
+    types: [opened, synchronize]  # Run on PR open or new commits
+jobs:
+  run-checks:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write  # Required to create checks
+      pull-requests: write  # Optional for PR comments
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up environment
+        uses: actions/setup-node@v4  # Adjust for your project (e.g., actions/setup-python for Python)
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install  # Replace with your dependency installation (e.g., pip install -r requirements.txt)
+      - name: Run tests
+        run: npm test     # Replace with your test command (e.g., pytest, make test)
+      - name: Create check
+        if: always()  # Run even if tests fail
+        uses: LouisBrunner/checks-action@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ci/tests
+          conclusion: ${{ job.status }}
+          output: |
+            {"summary":"Test suite for PR #${{ github.event.pull_request.number }}","details":"Ran tests for commit ${{ github.event.pull_request.head.sha }}"}
