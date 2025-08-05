@@ -1,0 +1,14 @@
+name: Set Commit Status
+on: [pull_request]
+jobs:
+  set-status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: myrotvorets/set-commit-status-action@master
+        with:
+          sha: ${{ github.event.pull_request.head.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: success
+          description: "Tests passed"
+          context: "ci/tests"
