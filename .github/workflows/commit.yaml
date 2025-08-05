@@ -10,7 +10,7 @@ jobs:
       - uses: myrotvorets/set-commit-status-action@master
         with:
           sha: ${{ github.event.pull_request.head.sha }}  # Dynamic SHA for PR
-          token: ${{ secrets.COMMIT_STATUS_TOKEN }}  # Use PAT
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use PAT
           status: success
           description: Tests passed
           context: ci/tests
