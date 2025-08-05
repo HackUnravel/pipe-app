@@ -3,12 +3,16 @@ on: [pull_request]
 jobs:
   set-status:
     runs-on: ubuntu-latest
+    permissions:
+      statuses: write  # Request status write permission
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: myrotvorets/set-commit-status-action@master
         with:
-          sha: ${{ github.event.pull_request.head.sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          sha: ${{ github.event.pull_request.head.sha }}  # Dynamic SHA for PR
+          token: ${{ secrets.COMMIT_STATUS_TOKEN }}  # Use PAT
           status: success
-          description: "Tests passed"
-          context: "ci/tests"
+          description: Tests passed
+          context: ci/tests
+          allowForks: true  # Allow fork PRs
+          targetUrl: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
