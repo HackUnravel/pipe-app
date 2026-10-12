@@ -6,7 +6,12 @@ const ROLE_PERMISSIONS = Object.freeze({
     admin: Object.freeze(['profile:read', 'content:write', 'users:manage']),
 });
 
-// Configuration is trusted deployment input. Roles never come from the request.
+/**
+ * Validate trusted deployment configuration; roles never come from requests.
+ * @param {string} [value='[]'] A JSON array of identities and token hashes.
+ * @returns {Readonly<{id: string, role: string, tokenSha256: string}>[]} Valid users.
+ * @throws {Error} If the JSON, any identity, or uniqueness constraints are invalid.
+ */
 function parseUsers(value = '[]') {
     let users;
     try {
@@ -47,6 +52,13 @@ function parseUsers(value = '[]') {
     });
 }
 
+/**
+ * Authenticate bearer tokens and attach only the configured identity and role.
+ * @param {Readonly<{id: string, role: string, tokenSha256: string}>[]} users Users
+ * already validated by parseUsers; changes require creating a new middleware.
+ * @returns {import('express').RequestHandler} Middleware that rejects invalid
+ * credentials with 401 and disables response caching.
+ */
 function createAuthentication(users) {
     const principals = new Map(
         users.map(({ id, role, tokenSha256 }) => [
@@ -74,6 +86,12 @@ function createAuthentication(users) {
     };
 }
 
+/**
+ * Guard an operation using the identity attached by authentication middleware.
+ * @param {string} permission Required permission; unknown permissions deny access.
+ * @returns {import('express').RequestHandler} Middleware returning 401 without an
+ * identity, 403 without permission, or continuing to the protected handler.
+ */
 function requirePermission(permission) {
     return (req, res, next) => {
         if (!req.user) {

@@ -15,6 +15,13 @@ const users = roles.map((role) => ({
     tokenSha256: createHash('sha256').update(tokens[role]).digest('hex'),
 }));
 
+/**
+ * Start an isolated HTTP test server and register cleanup with the test context.
+ * @param {import('node:test').TestContext} t The owning test's lifecycle context.
+ * @param {string} [rbacUsers] JSON identities; defaults to the test role fixtures.
+ * @returns {Promise<{app: import('express').Express, request: Function}>} The app
+ * and a fetch helper whose paths are relative to the ephemeral local server.
+ */
 async function serve(t, rbacUsers = JSON.stringify(users)) {
     const app = createApp({ rbacUsers });
     const server = app.listen(0, '127.0.0.1');
@@ -27,6 +34,12 @@ async function serve(t, rbacUsers = JSON.stringify(users)) {
     };
 }
 
+/**
+ * Construct request headers using the test token for the requested role.
+ * @param {'viewer'|'editor'|'admin'} role Fixture identity to authenticate as.
+ * @param {Record<string, string>} [extraHeaders] Headers to add or override.
+ * @returns {{headers: Record<string, string>}} Options for the request helper.
+ */
 function authorized(role, extraHeaders = {}) {
     return {
         headers: { Authorization: `Bearer ${tokens[role]}`, ...extraHeaders },
