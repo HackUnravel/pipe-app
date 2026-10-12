@@ -4,12 +4,20 @@
     "description": "test app",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node index.js"
+        "test": "node --test",
+        "start": "node index.js",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "express": "^4.18.2"
+    },
+    "devDependencies": {
+        "prettier": "3.9.10"
+    },
+    "engines": {
+        "node": ">=22"
     }
 }
